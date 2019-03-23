@@ -51,6 +51,7 @@ module.exports = function(webpackEnv) {
   // It requires a trailing slash, or the file assets will get an incorrect path.
   // In development, we always serve from the root. This makes config easier.
   const publicPath = isEnvProduction
+	// ? paths.servedPath
 	? '/static/bundles/'
     : isEnvDevelopment && 'http://localhost:3000/';
   // Some apps do not use client-side routing with pushState.
@@ -136,9 +137,9 @@ module.exports = function(webpackEnv) {
       // the line below with these two lines if you prefer the stock client:
       // require.resolve('webpack-dev-server/client') + '?/',
       // require.resolve('webpack/hot/dev-server'),
-	  require.resolve('webpack-dev-server/client') + '?http://localhost:3000',
-	  require.resolve('webpack/hot/dev-server'),
-	  isEnvDevelopment &&
+	  isEnvDevelopment && require.resolve('webpack-dev-server/client') + '?http://localhost:3000',
+	  isEnvDevelopment && require.resolve('webpack/hot/dev-server'),
+	  // isEnvDevelopment &&
         //require.resolve('react-dev-utils/webpackHotDevClient'),
       // Finally, this is your app's code:
       paths.appIndexJs,
@@ -589,7 +590,8 @@ module.exports = function(webpackEnv) {
           // The formatter is invoked directly in WebpackDevServerUtils during development
           formatter: isEnvProduction ? typescriptFormatter : undefined,
 		}),
-		new BundleTracker({path: paths.statsRoot, filename: 'webpack-stats.prod.json'}),
+		isEnvProduction && new BundleTracker({path: paths.statsRoot, filename: 'webpack-stats.prod.json'}),
+		isEnvDevelopment && new BundleTracker({path: paths.statsRoot, filename: 'webpack-stats.dev.json'}),
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.
     // Tell Webpack to provide empty mocks for them so importing them works.

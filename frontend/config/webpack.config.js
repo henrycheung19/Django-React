@@ -51,7 +51,7 @@ module.exports = function(webpackEnv) {
   // It requires a trailing slash, or the file assets will get an incorrect path.
   // In development, we always serve from the root. This makes config easier.
   const publicPath = isEnvProduction
-    ? paths.servedPath
+	? '/static/bundles/'
     : isEnvDevelopment && 'http://localhost:3000/';
   // Some apps do not use client-side routing with pushState.
   // For these, "homepage" can be set to "." to enable relative asset paths.
@@ -589,7 +589,7 @@ module.exports = function(webpackEnv) {
           // The formatter is invoked directly in WebpackDevServerUtils during development
           formatter: isEnvProduction ? typescriptFormatter : undefined,
 		}),
-		new BundleTracker({path: paths.statsRoot, filename: 'webpack-stats.dev.json'}),
+		new BundleTracker({path: paths.statsRoot, filename: 'webpack-stats.prod.json'}),
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.
     // Tell Webpack to provide empty mocks for them so importing them works.
